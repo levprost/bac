@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BacController;
 use App\Http\Controllers\TypeController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\UserController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -20,3 +22,11 @@ Route::get('/types', [TypeController::class, 'index'])->name('type.list');
 Route::post('/types', [TypeController::class, 'store'])->name('type.create');
 Route::put('/types/{type}', [TypeController::class, 'update'])->name('type.update');
 Route::get('/types/{type}', [TypeController::class, 'show'])->name('type.show');
+
+Route::post('/register', [AuthController::class, 'register']); 
+Route::post('/login', [AuthController::class, 'login']); 
+
+Route::middleware('auth:api')->group(function() { 
+    Route::get('/currentuser', [UserController::class, 'currentUser']); 
+    Route::post('/logout', [AuthController::class, 'logout']); 
+});
